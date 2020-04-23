@@ -11,6 +11,13 @@ g++
 --------------
 `g++ -o gsquares.exe -static-libstdc++ -Wall -L[SFML_lib_dir] -I[SFM_include_dir] src/main.cpp src/headers/bot.cpp src/headers/field.cpp -lsfml-graphics -lsfml-main -lsfml-window -lsfml-system -lwinmm -lgdi32 -lopenal32`
 
+dll
+----------------
+* openal32.dll
+* sfml-graphics-2.dll
+* sfml-system-2.dll
+* sfml-window-2.dll
+
 Future updates
 ==============
 * Possible MakeFile or CMakeLists
