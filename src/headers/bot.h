@@ -20,6 +20,9 @@ public:
 	void Mutate();
 	int PhsCount = 1;
 	int EatCount = 0;
+	bool Infected = false;
+	bool Immunity = false;
+	void ChangeGen(int cmdNum, int value);
 private:
 	int cmds[64];
 	int Energy = 1000;
@@ -30,5 +33,7 @@ private:
 	void Eat(int x, int y, Bot bots[60][100]);
 	void Move(int x, int y, Bot bots[60][100]);
 	void Share(int x, int y, Bot bots[60][100]);
+	void Cough(int x, int y, Bot bots[60][100]);
 	int DefaultEnergy = 1000;
+	int InfectChance = 10;
 };

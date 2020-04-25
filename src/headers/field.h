@@ -14,4 +14,6 @@ private:
 	int weidth = 100;
 	Bot bots[60][100];
 	bool Debug = false;
+	int InfectionTime = 100;
+	int InfectionCounter = 0;
 };

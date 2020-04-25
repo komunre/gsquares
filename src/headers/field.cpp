@@ -1,6 +1,12 @@
 #include "field.h"
 
 void Field::ExecuteAllCmds(){
+	bool Infected = false;
+	int InfectedNum = -1;
+	if (InfectionCounter >= InfectionTime){
+		InfectedNum = rand() % 300;
+	}
+	int BotCounter = 0;
 	for(int y = 0; y != height; y++){
 		for (int x = 0; x != weidth; x++){
 			if (bots[y][x].Exists && bots[y][x].Alive){
@@ -9,9 +15,26 @@ void Field::ExecuteAllCmds(){
 					std::cout << bots[y][x].GetRepl() << std::endl;
 				}
 				bots[y][x].DoCommand(x, y, bots);
+				if (bots[y][x].Infected){
+					int DeathChance = rand() % 100;
+					if (DeathChance < 3){
+						bots[y][x].Alive = false;
+					}
+				}
+				
+				if (InfectedNum != -1 && BotCounter >= InfectedNum && !Infected){
+					bots[y][x].Infected = true;
+					int CmdNum = rand() % 64;
+					bots[y][x].ChangeGen(CmdNum, 100);
+					CmdNum = rand() % 64;
+					bots[y][x].ChangeGen(CmdNum, 100);
+					Infected = true;
+				}
 			}
+			BotCounter++;
 		}
 	}
+	InfectionCounter++;
 }
 
 void Field::AddBot(int x, int y, Bot SomeBot){
@@ -53,6 +76,9 @@ void Field::Draw(sf::RenderWindow &window){
 				}
 				else{
 					AliveBot.setFillColor(sf::Color(255, 0, 0));
+				}
+				if (bots[y][x].Infected){
+					AliveBot.setFillColor(sf::Color(201, 0, 122));
 				}
 				window.draw(AliveBot);
 			}

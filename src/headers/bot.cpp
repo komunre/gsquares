@@ -39,6 +39,9 @@ void Bot::DoCommand(int x, int y, Bot bots[60][100]){
 	else if (cmds[turn] == 7){
 		Share(x, y, bots);
 	}
+	else if (cmds[turn] == 100){
+		Cough(x, y, bots);
+	}
 	turn++;
 	if (turn > 63){
 		turn = 0;
@@ -49,6 +52,9 @@ void Bot::DoCommand(int x, int y, Bot bots[60][100]){
 void Bot::Replicate(int x, int y, Bot bots[60][100]){
 	Bot NewBot;
 	NewBot.Setup(cmds, true, DefaultEnergy);
+	if (Infected){
+		NewBot.Infected = true;
+	}
 	Replications++;
 	if (Replications >= 4){
 		NewBot.Mutate();
@@ -244,4 +250,36 @@ void Bot::Mutate(){
 	int DNAindex = rand() % 64;
 	cmds[DNAindex] = rand() % 7 + 1;
 	Replications = 0;
+}
+
+void Bot::Cough(int x, int y, Bot bots[60][100]){
+	int SetInfect = rand() % 100;
+	int CmdNum = rand() % 64;
+	if (x > 0 && bots[y][x - 1].Alive && SetInfect < InfectChance && !bots[y][x - 1].Immunity){
+		bots[y][x - 1].Infected = true;
+		bots[y][x - 1].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (y > 0 && bots[y - 1][x].Alive && SetInfect < InfectChance && !bots[y - 1][x].Immunity){
+		bots[y - 1][x].Infected = true;
+		bots[y - 1][x].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (x < 99 && bots[y][x + 1].Alive && SetInfect < InfectChance && !bots[y][x + 1].Immunity){
+		bots[y][x + 1].Infected = true;
+		bots[y][x + 1].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (y < 59 && bots[y + 1][x].Alive && SetInfect < InfectChance && !bots[y + 1][x].Immunity){
+		bots[y + 1][x].Infected = true;
+		bots[y + 1][x].ChangeGen(CmdNum, 100);
+	}
+}
+
+
+void Bot::ChangeGen(int cmdNum, int value){
+	cmds[cmdNum] = value;
 }
