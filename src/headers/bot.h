@@ -8,7 +8,7 @@
 class Bot{
 public:
 	Bot();
-	void Setup(int cmd[64], bool exst, int AmEnergy);
+	void Setup(int cmd[64], bool exst, int AmEnergy, int age = 0);
 	void DoCommand(int x, int y, Bot bots[60][100]);
 	int GetEnergy() { return Energy; }
 	void SetEnergy(int En) { Energy = En; }
@@ -24,6 +24,7 @@ public:
 	bool Immunity = false;
 	void ChangeGen(int cmdNum, int value);
 private:
+	int age = 0;
 	int cmds[64];
 	int Energy = 1000;
 	int turn = 0;
@@ -35,5 +36,5 @@ private:
 	void Share(int x, int y, Bot bots[60][100]);
 	void Cough(int x, int y, Bot bots[60][100]);
 	int DefaultEnergy = 1000;
-	int InfectChance = 10;
+	int InfectChance = 30;
 };
