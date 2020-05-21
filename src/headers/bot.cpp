@@ -63,30 +63,14 @@ void Bot::Replicate(int x, int y, Bot bots[60][100]){
 	if (y > 0 && !bots[y - 1][x].Exists){ // Up direction
 		bots[y - 1][x] = NewBot;
 	}
-	else if (!bots[59][x].Exists){ // Through end of the array
-		bots[y][99] = NewBot;
-		return;
-	}
-	if (x > 0 && !bots[y][x - 1].Exists){ //left
+	else if (x > 0 && !bots[y][x - 1].Exists){ //left
 		bots[y][x - 1] = NewBot;
 	}
-	else if (!bots[y][99].Exists){
-		bots[y][99] = NewBot;
-		return;
-	}
-	if (y < 59 && !bots[y + 1][x].Exists){ //down
+	else if (y < 59 && !bots[y + 1][x].Exists){ //down
 		bots[y + 1][x] = NewBot;
 	}
-	else if (!bots[0][x].Exists){
-		bots[0][x] = NewBot;
-		return;
-	}
-	if (x < 99 && !bots[y][x + 1].Exists){ //right
+	else if (x < 99 && !bots[y][x + 1].Exists){ //right
 		bots[y][x + 1] = NewBot;
-	}
-	else if (!bots[y][0].Exists){
-		bots[y][0] = NewBot;
-		return;
 	}
 	else{
 		Alive = false;
@@ -113,14 +97,15 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 		case 0:
 			if (x > 0 && bots[y][x - 1].Exists){ //left
 				bots[y][x - 1].Exists = false; //Eat and destroy
-				Energy += bots[y][x - 1].GetEnergy(); //Get him energy
+				Energy += bots[y][x - 1].GetEnergy() + 50; //Get him energy + 50 (for dead bodyes)
 				EatCount++; // Just design
+				bots[y][x - 1].SetEnergy(0); //Set energy to zero
 			}
 			break;
-		case 1:
+		case 1: //And in other case
 			if (y > 0 && bots[y - 1][x].Exists){ //up
 				bots[y - 1][x].Exists = false;
-				Energy += bots[y - 1][x].GetEnergy();
+				Energy += bots[y - 1][x].GetEnergy() + 50;
 				EatCount++;
 				bots[y - 1][x].SetEnergy(0);
 			}
@@ -128,7 +113,7 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 		case 2:
 			if (x < 99 && bots[y][x + 1].Exists){ //right
 				bots[y][x + 1].Exists = false;
-				Energy += bots[y][x + 1].GetEnergy();
+				Energy += bots[y][x + 1].GetEnergy() + 50;
 				bots[y][x + 1].SetEnergy(0);
 				EatCount++;
 			}
@@ -137,7 +122,7 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 			if (y < 59 && bots[y + 1][x].Exists){ //down
 				bots[y + 1][x].Exists = false;
 				EatCount++;
-				Energy += bots[y + 1][x].GetEnergy();
+				Energy += bots[y + 1][x].GetEnergy() + 50;
 				bots[y + 1][x].SetEnergy(0);
 			}
 			break;
@@ -145,7 +130,7 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 			if (x > 0 && bots[y][x - 1].Exists){
 				bots[y][x - 1].Exists = false;
 				EatCount++;
-				Energy += bots[y][x - 1].GetEnergy();
+				Energy += bots[y][x - 1].GetEnergy() + 50;
 				bots[y][x - 1].SetEnergy(0);
 			}
 			break;
@@ -255,8 +240,8 @@ void Bot::Mutate(){
 }
 
 void Bot::Cough(int x, int y, Bot bots[60][100]){ // Infect bots in all directions
-	int SetInfect = rand() % 100;
-	int CmdNum = rand() % 64;
+	int SetInfect = rand() % 100; // Get infect chance
+	int CmdNum = rand() % 64; // Get cmd num for infect
 	if (x > 0 && bots[y][x - 1].Alive && SetInfect < InfectChance && !bots[y][x - 1].Immunity){
 		bots[y][x - 1].Infected = true;
 		bots[y][x - 1].ChangeGen(CmdNum, 100);
