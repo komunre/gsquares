@@ -7,9 +7,13 @@ Libraries
 
 How to build
 ===================
-g++
+g++ windows
 --------------
 `g++ -o gsquares.exe -static-libstdc++ -Wall -L[SFML_lib_dir] -I[SFM_include_dir] src/main.cpp src/headers/bot.cpp src/headers/field.cpp -lsfml-graphics -lsfml-main -lsfml-window -lsfml-system -lwinmm -lgdi32 -lopenal32`
+
+gcc linux
+----------------
+`gcc -xc++ -lstdc++ -L[SFML_lib_dir] -I[SFML_include_dir] src/main.cpp src/headers/bot.cpp src/headers/field.cpp -lsfml-graphicws -lsfml-window -lsfml-system`
 
 dll
 ----------------

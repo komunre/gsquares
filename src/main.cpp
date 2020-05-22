@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <windows.h>
 #include "headers/field.h"
 
 
@@ -12,7 +11,6 @@ void CreateBotForField(Field &f){
 	cmds[0] = 2;
 	for (int x = 1; x != 64; x++){
 		cmds[x] = rand() % 7 + 1;
-		Sleep(10);
 	}
 	cout << "Commands created. Creating bot..." << endl;
 	Bot CreateBot;

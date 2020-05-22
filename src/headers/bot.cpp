@@ -2,23 +2,24 @@
 
 Bot::Bot(){}
 
-void Bot::Setup(int cmd[64], bool exst, int AmEnergy){
+void Bot::Setup(int cmd[64], bool exst, int AmEnergy, int age){
 	for (int x = 0; x != 64; x++){
 		cmds[x] = cmd[x];
 	}
 	Exists = exst;
 	Energy = AmEnergy;
+	this->age = age;
 }
 
 void Bot::Phs(int y){
 	if (y <= 20){
-		Energy += 7;
+		Energy += 7 / (age * 0.001);
 	}
 	else if (y <= 40){
-		Energy += 5;
+		Energy += 5 / (age * 0.001);
 	}
 	else{
-		Energy += 2;
+		Energy += 2 / (age * 0.001);
 	}
 	PhsCount++;
 }
@@ -39,48 +40,37 @@ void Bot::DoCommand(int x, int y, Bot bots[60][100]){
 	else if (cmds[turn] == 7){
 		Share(x, y, bots);
 	}
+	else if (cmds[turn] == 100){
+		Cough(x, y, bots);
+	}
 	turn++;
 	if (turn > 63){
 		turn = 0;
 	}
 	Energy -= 3;
+	age++;
 }
 
 void Bot::Replicate(int x, int y, Bot bots[60][100]){
 	Bot NewBot;
-	NewBot.Setup(cmds, true, DefaultEnergy);
+	NewBot.Setup(cmds, true, DefaultEnergy, 0);
+	NewBot.Infected = Infected;
 	Replications++;
 	if (Replications >= 4){
 		NewBot.Mutate();
 		Replications = 0;
 	}
-	if (y > 0 && !bots[y - 1][x].Exists){
+	if (y > 0 && !bots[y - 1][x].Exists){ // Up direction
 		bots[y - 1][x] = NewBot;
 	}
-	else if (!bots[59][x].Exists){
-		bots[y][99] = NewBot;
-		return;
-	}
-	if (x > 0 && !bots[y][x - 1].Exists){
+	else if (x > 0 && !bots[y][x - 1].Exists){ //left
 		bots[y][x - 1] = NewBot;
 	}
-	else if (!bots[y][99].Exists){
-		bots[y][99] = NewBot;
-		return;
-	}
-	if (y < 59 && !bots[y + 1][x].Exists){
+	else if (y < 59 && !bots[y + 1][x].Exists){ //down
 		bots[y + 1][x] = NewBot;
 	}
-	else if (!bots[0][x].Exists){
-		bots[0][x] = NewBot;
-		return;
-	}
-	if (x < 99 && !bots[y][x + 1].Exists){
+	else if (x < 99 && !bots[y][x + 1].Exists){ //right
 		bots[y][x + 1] = NewBot;
-	}
-	else if (!bots[y][0].Exists){
-		bots[y][0] = NewBot;
-		return;
 	}
 	else{
 		Alive = false;
@@ -105,33 +95,34 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 	int direction = cmds[turn + 1] % 4;
 	switch (direction){
 		case 0:
-			if (x > 0 && bots[y][x - 1].Exists){
-				bots[y][x - 1].Exists = false;
-				Energy += bots[y][x - 1].GetEnergy();
-				EatCount++;
+			if (x > 0 && bots[y][x - 1].Exists){ //left
+				bots[y][x - 1].Exists = false; //Eat and destroy
+				Energy += bots[y][x - 1].GetEnergy() + 50; //Get him energy + 50 (for dead bodyes)
+				EatCount++; // Just design
+				bots[y][x - 1].SetEnergy(0); //Set energy to zero
 			}
 			break;
-		case 1:
-			if (y > 0 && bots[y - 1][x].Exists){
+		case 1: //And in other case
+			if (y > 0 && bots[y - 1][x].Exists){ //up
 				bots[y - 1][x].Exists = false;
-				Energy += bots[y - 1][x].GetEnergy();
+				Energy += bots[y - 1][x].GetEnergy() + 50;
 				EatCount++;
 				bots[y - 1][x].SetEnergy(0);
 			}
 			break;
 		case 2:
-			if (x < 99 && bots[y][x + 1].Exists){
+			if (x < 99 && bots[y][x + 1].Exists){ //right
 				bots[y][x + 1].Exists = false;
-				Energy += bots[y][x + 1].GetEnergy();
+				Energy += bots[y][x + 1].GetEnergy() + 50;
 				bots[y][x + 1].SetEnergy(0);
 				EatCount++;
 			}
 			break;
 		case 3:
-			if (y < 59 && bots[y + 1][x].Exists){
+			if (y < 59 && bots[y + 1][x].Exists){ //down
 				bots[y + 1][x].Exists = false;
 				EatCount++;
-				Energy += bots[y + 1][x].GetEnergy();
+				Energy += bots[y + 1][x].GetEnergy() + 50;
 				bots[y + 1][x].SetEnergy(0);
 			}
 			break;
@@ -139,7 +130,7 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 			if (x > 0 && bots[y][x - 1].Exists){
 				bots[y][x - 1].Exists = false;
 				EatCount++;
-				Energy += bots[y][x - 1].GetEnergy();
+				Energy += bots[y][x - 1].GetEnergy() + 50;
 				bots[y][x - 1].SetEnergy(0);
 			}
 			break;
@@ -148,13 +139,15 @@ void Bot::Eat(int x, int y, Bot bots[60][100]){
 
 void Bot::Move(int x, int y, Bot bots[60][100]){
 	Bot MovedBot;
-	MovedBot.Setup(cmds, true, Energy);
+	MovedBot.Setup(cmds, true, Energy, age);
 	MovedBot.PhsCount = PhsCount;
 	MovedBot.EatCount = EatCount;
+	MovedBot.Infected = Infected;
+	MovedBot.Immunity = Immunity;
 	int direction = cmds[turn + 1] % 4;
 	switch (direction){
 		case 1:
-			if (x > 0 && !bots[y][x - 1].Exists){
+			if (x > 0 && !bots[y][x - 1].Exists){ //If bot doesn't exist
 				bots[y][x - 1] = MovedBot;
 			}
 			else if (!bots[y][99].Exists){
@@ -213,7 +206,7 @@ void Bot::Move(int x, int y, Bot bots[60][100]){
 	bots[y][x] = EmptyBot;
 }
 
-void Bot::Share(int x, int y, Bot bots[60][100]){
+void Bot::Share(int x, int y, Bot bots[60][100]){ //Share energy to other bot
 	int direction = cmds[turn + 1] % 4;
 	int amount = cmds[turn + 2];
 	amount = amount * 5;
@@ -244,4 +237,36 @@ void Bot::Mutate(){
 	int DNAindex = rand() % 64;
 	cmds[DNAindex] = rand() % 7 + 1;
 	Replications = 0;
+}
+
+void Bot::Cough(int x, int y, Bot bots[60][100]){ // Infect bots in all directions
+	int SetInfect = rand() % 100; // Get infect chance
+	int CmdNum = rand() % 64; // Get cmd num for infect
+	if (x > 0 && bots[y][x - 1].Alive && SetInfect < InfectChance && !bots[y][x - 1].Immunity){
+		bots[y][x - 1].Infected = true;
+		bots[y][x - 1].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (y > 0 && bots[y - 1][x].Alive && SetInfect < InfectChance && !bots[y - 1][x].Immunity){
+		bots[y - 1][x].Infected = true;
+		bots[y - 1][x].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (x < 99 && bots[y][x + 1].Alive && SetInfect < InfectChance && !bots[y][x + 1].Immunity){
+		bots[y][x + 1].Infected = true;
+		bots[y][x + 1].ChangeGen(CmdNum, 100);
+	}
+	SetInfect = rand() % 100;
+	CmdNum = rand() % 64;
+	if (y < 59 && bots[y + 1][x].Alive && SetInfect < InfectChance && !bots[y + 1][x].Immunity){
+		bots[y + 1][x].Infected = true;
+		bots[y + 1][x].ChangeGen(CmdNum, 100);
+	}
+}
+
+
+void Bot::ChangeGen(int cmdNum, int value){
+	cmds[cmdNum] = value;
 }
