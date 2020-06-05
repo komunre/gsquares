@@ -1,13 +1,36 @@
 #include "field.h"
 
 void Field::ExecuteAllCmds(){
-	for(int x = 0; x != height; x++){
-		for (int y = 0; y != width; y++){
+	bool Infected = false;
+	int InfectedNum = -1;
+	if (InfectionCounter >= InfectionTime){
+		InfectedNum = rand() % 300;
+	}
+	int BotCounter = 0;
+	for(int x = 0; x != width; x++){
+		for (int y = 0; y != height; y++){
 			if (bots[x][y].Exists && bots[x][y].Alive){
 				bots[x][y].DoCommand(x, y, bots, width, height);
+				if (bots[x][y].Infected){
+					int DeathChance = rand() % 100;
+					if (DeathChance < 3){
+						bots[x][y].Alive = false;
+					}
+				}
+				
+				if (InfectedNum != -1 && BotCounter >= InfectedNum && !Infected){
+					bots[x][y].Infected = true;
+					int CmdNum = rand() % 64;
+					bots[x][y].ChangeGen(CmdNum, 100);
+					CmdNum = rand() % 64;
+					bots[x][y].ChangeGen(CmdNum, 100);
+					Infected = true;
+				}
 			}
+			BotCounter++;
 		}
 	}
+	InfectionCounter++;
 }
 
 void Field::AddBot(int x, int y, Bot SomeBot){
@@ -24,7 +47,7 @@ Field::Field(){
 		EmptyCmd[i] = 2;
 	}
 	Bot EmptyBot;
-	EmptyBot.Setup(EmptyCmd, false, 200);
+	EmptyBot.Setup(EmptyCmd, false, 200, 0);
 	for (int x = 0; x != height; x++){
 		for (int y = 0; y != width; y++){
 			bots[x][y] = EmptyBot;
@@ -52,6 +75,9 @@ void Field::Draw(sf::RenderWindow &window){
 				}
 				else{
 					AliveBot.setFillColor(sf::Color(255, 0, 0));
+				}
+				if (bots[x][y].Infected){
+					AliveBot.setFillColor(sf::Color(201, 0, 122));
 				}
 				window.draw(AliveBot);
 			}

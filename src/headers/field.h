@@ -13,4 +13,6 @@ public:
 	const int width = 100;
 private:
 	Bot **bots;
+	int InfectionCounter;
+	int InfectionTime = 300;
 };

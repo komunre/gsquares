@@ -17,7 +17,7 @@ void CreateBotForField(Field &f){
 	cout << "Bot created. Getting DNA..." << endl;
 	string DNA = CreateBot.GetGen();
 	cout << DNA << endl;
-	CreateBot.Setup(cmds, true, 1000);
+	CreateBot.Setup(cmds, true, 1000, 0);
 	ofstream DNAlog("DNA.txt", ios::app);
 	DNAlog << DNA << endl;
 	DNAlog.close();
