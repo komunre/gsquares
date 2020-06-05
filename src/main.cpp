@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <windows.h>
 #include "headers/field.h"
 
 
@@ -12,7 +11,6 @@ void CreateBotForField(Field &f){
 	cmds[0] = 2;
 	for (int x = 1; x != 64; x++){
 		cmds[x] = rand() % 7 + 1;
-		Sleep(10);
 	}
 	cout << "Commands created. Creating bot..." << endl;
 	Bot CreateBot;
@@ -29,10 +27,9 @@ void CreateBotForField(Field &f){
 int main(){
 	srand(time(0));
 	cout << "Main function is working." << endl;
-	Field allf(false);
+	Field allf;
 	CreateBotForField(allf);
 	CreateBotForField(allf);
-	system("pause");
 	sf::RenderWindow window(sf::VideoMode(1200, 700), "ALife");
 	while (window.isOpen()){
 		window.clear(sf::Color::Black);

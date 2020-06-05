@@ -9,7 +9,7 @@ class Bot{
 public:
 	Bot();
 	void Setup(int cmd[64], bool exst, int AmEnergy);
-	void DoCommand(int x, int y, Bot bots[60][100]);
+	void DoCommand(int x, int y, Bot **bots, int weidth, int height);
 	int GetEnergy() { return Energy; }
 	void SetEnergy(int En) { Energy = En; }
 	int GetRepl() { return Replications; }
@@ -26,9 +26,9 @@ private:
 	int turn = 0;
 	int Replications = 0;
 	void Phs(int y);
-	void Replicate(int x, int y, Bot bots[60][100]);
-	void Eat(int x, int y, Bot bots[60][100]);
-	void Move(int x, int y, Bot bots[60][100]);
-	void Share(int x, int y, Bot bots[60][100]);
+	void Replicate(int x, int y, Bot **bots, int weidth, int height);
+	void Eat(int x, int y, Bot **bots, int weidth, int height);
+	void Move(int x, int y, Bot **bots, int weidth, int height);
+	void Share(int x, int y, Bot **bots, int weidth, int height);
 	int DefaultEnergy = 1000;
 };

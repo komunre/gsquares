@@ -5,13 +5,12 @@
 
 class Field{
 public:
-	Field(bool debug);
+	Field();
 	void ExecuteAllCmds();
 	void AddBot(int x, int y, Bot SomeBot);
 	void Draw(sf::RenderWindow &window);
+	const int height = 80;
+	const int width = 100;
 private:
-	int height = 60;
-	int weidth = 100;
-	Bot bots[60][100];
-	bool Debug = false;
+	Bot **bots;
 };
