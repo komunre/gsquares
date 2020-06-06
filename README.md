@@ -15,6 +15,13 @@ gcc linux
 ----------------
 `gcc -xc++ -lstdc++ -L[SFML_lib_dir] -I[SFML_include_dir] src/main.cpp src/headers/bot.cpp src/headers/field.cpp -lsfml-graphicws -lsfml-window -lsfml-system`
 
+cmake
+--------------
+`mkdir build`
+`cd build`
+`cmake ..`
+`make all`
+
 dll
 ----------------
 * openal32.dll
