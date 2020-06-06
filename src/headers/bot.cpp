@@ -42,7 +42,6 @@ void Bot::DoCommand(int x, int y, Bot **bots, int width, int height){
 	}
 	else if (cmds[turn] == 100){
 		Cough(x, y, bots);
-		std::cout << "100";
 	}
 	turn++;
 	if (turn > 63){
