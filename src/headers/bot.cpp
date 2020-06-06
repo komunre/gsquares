@@ -30,19 +30,15 @@ void Bot::DoCommand(int x, int y, Bot **bots, int width, int height){
 	}
 	else if (cmds[turn] == 4){
 		Replicate(x, y, bots, width, height);
-		std::cout << "4\n";
 	}
 	else if (cmds[turn] == 5){
 		Eat(x, y, bots, width, height);
-		std::cout << "5" << std::to_string(cmds[turn + 1]);
 	}
 	else if (cmds[turn] == 6){
 		Move(x, y, bots, width, height);
-		std::cout << "6" << std::to_string(cmds[turn + 1]);
 	}
 	else if (cmds[turn] == 7){
 		Share(x, y, bots, width, height);
-		std::cout << "7" << std::to_string(cmds[turn + 1]);
 	}
 	else if (cmds[turn] == 100){
 		Cough(x, y, bots);
