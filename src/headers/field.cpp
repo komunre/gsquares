@@ -31,13 +31,15 @@ void Field::ExecuteAllCmds(){
 		}
 	}
 	InfectionCounter++;
+	sf::sleep(sf::milliseconds(sleepMs));
 }
 
 void Field::AddBot(int x, int y, Bot SomeBot){
 	bots[x][y] = SomeBot;
 }
 
-Field::Field(){
+Field::Field(int sleepMs){
+	this->sleepMs = sleepMs;
 	bots = new Bot* [width];
 	for (int x = 0; x != width; x++){
 		bots[x] = new Bot[height];

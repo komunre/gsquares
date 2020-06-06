@@ -32,6 +32,10 @@ dll
 * sfml-system-2.dll
 * sfml-window-2.dll
 
+How i can slow down process?
+=====================================
+Run programm with indicating sleep time in milliseconds ( `./gsquares [time_in_milliseconds]` Example: ./gsquares 100)
+
 Future updates
 ==============
 * Support, fixes

@@ -24,10 +24,14 @@ void CreateBotForField(Field &f){
 	f.AddBot(rand() % 60, rand() % 100, CreateBot);
 }
 
-int main(){
+int main(int argc, char* argv[]){
 	srand(time(0));
 	cout << "Main function is working." << endl;
-	Field allf;
+	int sleepMs = 0;
+	if (argc > 1){
+		sleepMs = atoi(argv[1]);
+	}
+	Field allf(sleepMs);
 	CreateBotForField(allf);
 	CreateBotForField(allf);
 	sf::RenderWindow window(sf::VideoMode(1200, 700), "ALife");
