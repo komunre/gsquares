@@ -34,4 +34,4 @@ dll
 
 Future updates
 ==============
-* Possible MakeFile or CMakeLists
+* Support, fixes
