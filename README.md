@@ -32,6 +32,21 @@ dll
 * sfml-system-2.dll
 * sfml-window-2.dll
 
+About project
+===============
+
+Colors
+----------------
+Green - Alive and peaciful
+Red - Alive and aggressive
+Purple - Alive and infected
+Gray - DEAD
+Black - Nothing (Exists == false lmao)
+
+Screenshots
+-------------------
+![Life in general](https://cdn.discordapp.com/attachments/698171873208303646/719112712210088016/2020-05-20_16-20-24.png)
+
 How i can slow down process?
 =====================================
 Run programm with indicating sleep time in milliseconds ( `./gsquares [time_in_milliseconds]` Example: ./gsquares 100)
