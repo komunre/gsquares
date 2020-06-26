@@ -34,7 +34,7 @@ private:
 	void Eat(int x, int y, Bot **bots, int width, int height);
 	void Move(int x, int y, Bot **bots, int width, int height);
 	void Share(int x, int y, Bot **bots, int width, int height);
-	void Cough(int x, int y, Bot **bots);
+	void Cough(int x, int y, Bot **bots, int width, int height);
 	int DefaultEnergy = 1000; //Enegy gived after birth
 	int InfectChance = 30;
 };

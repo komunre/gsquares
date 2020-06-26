@@ -41,7 +41,7 @@ void Bot::DoCommand(int x, int y, Bot **bots, int width, int height){
 		Share(x, y, bots, width, height);
 	}
 	else if (cmds[turn] == 100){
-		Cough(x, y, bots);
+		Cough(x, y, bots, width, height);
 	}
 	turn++;
 	if (turn > 63){
@@ -238,7 +238,7 @@ void Bot::Mutate(){
 	Replications = 0;
 }
 
-void Bot::Cough(int x, int y, Bot **bots){ // Infect bots in all directions
+void Bot::Cough(int x, int y, Bot **bots, int width, int height){ // Infect bots in all directions
 	int SetInfect = rand() % 100; // Get infect chance
 	int CmdNum = rand() % 64; // Get cmd num for infect
 	if (x > 0 && bots[y][x - 1].Alive && SetInfect < InfectChance && !bots[y][x - 1].Immunity){
@@ -253,13 +253,13 @@ void Bot::Cough(int x, int y, Bot **bots){ // Infect bots in all directions
 	}
 	SetInfect = rand() % 100;
 	CmdNum = rand() % 64;
-	if (x < 99 && bots[y][x + 1].Alive && SetInfect < InfectChance && !bots[y][x + 1].Immunity){
+	if (x < width - 1 && bots[y][x + 1].Alive && SetInfect < InfectChance && !bots[y][x + 1].Immunity){
 		bots[y][x + 1].Infected = true;
 		bots[y][x + 1].ChangeGen(CmdNum, 100);
 	}
 	SetInfect = rand() % 100;
 	CmdNum = rand() % 64;
-	if (y < 59 && bots[y + 1][x].Alive && SetInfect < InfectChance && !bots[y + 1][x].Immunity){
+	if (y < height - 1 && bots[y + 1][x].Alive && SetInfect < InfectChance && !bots[y + 1][x].Immunity){
 		bots[y + 1][x].Infected = true;
 		bots[y + 1][x].ChangeGen(CmdNum, 100);
 	}
